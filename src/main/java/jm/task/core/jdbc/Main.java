@@ -10,12 +10,23 @@ public class Main {
         Util.SQLconnect();
 
         UserDao userDao = new UserDaoJDBCImpl();
+
+        //Создание таблицы
         userDao.createUsersTable();
 
-        userDao.saveUser("asrd","fds",(byte) 21);
-        userDao.saveUser("asr2d","fds",(byte) 23);
-        userDao.saveUser("as3rd","fds",(byte) 24);
+        //Добавление сущностей
+        userDao.saveUser("Ivan","Ivanov",(byte) 21);
+        userDao.saveUser("Petr","Petrov",(byte) 23);
+        userDao.saveUser("Anton","Titov",(byte) 23);
+        userDao.saveUser("Dmitry","Dmitriev",(byte) 24);
 
+        //Список Юзеров
         System.out.println(userDao.getAllUsers());
+
+        //Очистка
+        userDao.cleanUsersTable();
+
+        //Удаление
+        userDao.dropUsersTable();
     }
 }
