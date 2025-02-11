@@ -2,12 +2,20 @@ package jm.task.core.jdbc;
 
 import jm.task.core.jdbc.dao.UserDao;
 import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
+import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 public class Main {
     public static void main(String[] args) {
         UserDao userDao = new UserDaoJDBCImpl();
-        Util.getSessionFactory();
+
+        SessionFactory sessionFactory = Util.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        User user = session.get(User.class, 1);
+        System.out.println(user);
         //Создание таблицы
         userDao.createUsersTable();
 
