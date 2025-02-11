@@ -1,16 +1,30 @@
 package jm.task.core.jdbc.util;
 
+import com.mysql.cj.Session;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
-public class Util {
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.cfg.Environment;
+import org.hibernate.service.ServiceRegistry;
+
+
+public final class Util {
     private static final String DB_URL = "jdbc:mysql://localhost:3306";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "root";
+    private static SessionFactory sessionFactory;
+    private static Connection connection = null;
 
-    static Connection connection = null;
+    private Util() {
+
+    }
 
     public static Connection SQLconnect() {
         try {
@@ -24,5 +38,16 @@ public class Util {
             System.out.println("Не удалось подключиться");
         }
         return connection;
+    }
+
+    public static void closeConnection() {
+        if (connection != null) {
+            try {
+                connection.close();
+                System.out.println("Соединение закрыто");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
