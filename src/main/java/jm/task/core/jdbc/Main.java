@@ -7,7 +7,7 @@ import jm.task.core.jdbc.util.Util;
 public class Main {
     public static void main(String[] args) {
         UserDao userDao = new UserDaoJDBCImpl();
-
+        Util.getSessionFactory();
         //Создание таблицы
         userDao.createUsersTable();
 
@@ -21,10 +21,10 @@ public class Main {
         System.out.println(userDao.getAllUsers());
 
         //Очистка
-        userDao.cleanUsersTable();
+        //userDao.cleanUsersTable();
 
         //Удаление
-        userDao.dropUsersTable();
+        //userDao.dropUsersTable();
 
         //Закрытие соединения
         Util.closeConnection();
