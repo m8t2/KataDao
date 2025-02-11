@@ -19,7 +19,7 @@ public class UserDaoJDBCImpl implements UserDao {
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS users.users";
     private static final String CLEAR_TABLE = "TRUNCATE TABLE users.users";
 
-    private final Connection connection;
+    private static Connection connection;
 
     public UserDaoJDBCImpl() {
         this.connection = Util.SQLconnect();
@@ -31,7 +31,8 @@ public class UserDaoJDBCImpl implements UserDao {
             statement.execute(CREATE_TABLE);
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка создания таблицы", e);
-        }     }
+        }
+    }
 
     @Override
     public void dropUsersTable() {
@@ -45,7 +46,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        try(PreparedStatement statement = connection.prepareStatement(SAVE_USER)) {
+        try (PreparedStatement statement = connection.prepareStatement(SAVE_USER)) {
             connection.setAutoCommit(false);
             statement.setString(1, name);
             statement.setString(2, lastName);
