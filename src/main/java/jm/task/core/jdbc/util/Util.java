@@ -55,7 +55,7 @@ public final class Util {
                 // Дополнительные настройки
                 configuration.setProperty("hibernate.show_sql", "true");
                 configuration.setProperty("hibernate.format_sql", "true");
-                //configuration.setProperty("hibernate.hbm2ddl.auto", "create");
+                //configuration.setProperty("hibernate.hbm2ddl.auto", "create-drop");
 
                 // Регистрируем классы-сущности (аннотированные @Entity)
 

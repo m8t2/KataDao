@@ -13,6 +13,7 @@ public class Main {
         //UserDao userDao = new UserDaoJDBCImpl();
         UserDaoHibernateImpl userDaoHibernate = new UserDaoHibernateImpl();
         userDaoHibernate.createUsersTable();
+        //userDaoHibernate.dropUsersTable();
 
         //Создание таблицы
 //        userDao.createUsersTable();
