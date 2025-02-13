@@ -1,12 +1,7 @@
 package jm.task.core.jdbc;
 
-import jm.task.core.jdbc.dao.UserDao;
 import jm.task.core.jdbc.dao.UserDaoHibernateImpl;
-import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
-import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 public class Main {
     public static void main(String[] args) {
@@ -22,16 +17,16 @@ public class Main {
         userDaoHibernate.saveUser("Zaur", "Tregulov", (byte) 33);
 
         // Удаление пользователя по id
-        //userDaoHibernate.removeUserById(2);
+        userDaoHibernate.removeUserById(2);
 
         //Список Юзеров
         userDaoHibernate.getAllUsers().forEach(System.out::println);
 
         //Очистка таблицы
-        //userDaoHibernate.cleanUsersTable();
+        userDaoHibernate.cleanUsersTable();
 
         //Удаление таблицы
-        //userDaoHibernate.dropUsersTable();
+        userDaoHibernate.dropUsersTable();
 
         //Закрытие соединения
         Util.closeConnection();

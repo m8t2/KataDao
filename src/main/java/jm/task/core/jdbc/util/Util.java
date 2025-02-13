@@ -25,19 +25,19 @@ public final class Util {
 
     }
 
-//    public static Connection SQLconnect() {
-//        try {
-//            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-//            Statement stmt = connection.createStatement();
-//            stmt.execute("CREATE SCHEMA IF NOT EXISTS Users");
-//            stmt.execute("USE Users");
-//            System.out.println("Подключение успешно");
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            System.out.println("Не удалось подключиться");
-//        }
-//        return connection;
-//    }
+    public static Connection SQLconnect() {
+        try {
+            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            Statement stmt = connection.createStatement();
+            stmt.execute("CREATE SCHEMA IF NOT EXISTS Users");
+            stmt.execute("USE Users");
+            System.out.println("Подключение успешно");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Не удалось подключиться");
+        }
+        return connection;
+    }
 
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null || sessionFactory.isClosed()) {
@@ -52,7 +52,6 @@ public final class Util {
 
                 configuration.setProperty("hibernate.show_sql", "true");
                 configuration.setProperty("hibernate.format_sql", "true");
-                //configuration.setProperty("hibernate.hbm2ddl.auto", "create-drop");
 
                 configuration.addAnnotatedClass(User.class);
 
