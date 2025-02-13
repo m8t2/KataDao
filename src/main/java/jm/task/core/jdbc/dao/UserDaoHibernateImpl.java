@@ -34,7 +34,6 @@ public class UserDaoHibernateImpl implements UserDao {
             tx.commit();
             System.out.println("Таблица создана с помощью Hibernate");
         } catch (HibernateException e) {
-            if (tx != null) tx.rollback();
             e.printStackTrace();
             System.out.println("Ошибка создания таблицы Hibernate");
         }
@@ -47,8 +46,8 @@ public class UserDaoHibernateImpl implements UserDao {
             String sql = "DROP TABLE IF EXISTS users";
             session.createNativeQuery(sql).executeUpdate();
             tx.commit();
+            System.out.println("Таблица успешно создана");
         } catch (HibernateException e) {
-            if (tx != null) tx.rollback();
             e.printStackTrace();
             System.out.println("Ошибка создания таблицы Hibernate");
         }
