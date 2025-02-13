@@ -42,31 +42,24 @@ public final class Util {
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null || sessionFactory.isClosed()) {
             try {
-                // Создаём объект Configuration
                 Configuration configuration = new Configuration();
 
-                // Устанавливаем свойства подключения и другие параметры Hibernate
                 configuration.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
                 configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/users");
                 configuration.setProperty("hibernate.connection.username", "root");
                 configuration.setProperty("hibernate.connection.password", "root");
                 configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
 
-                // Дополнительные настройки
                 configuration.setProperty("hibernate.show_sql", "true");
                 configuration.setProperty("hibernate.format_sql", "true");
                 //configuration.setProperty("hibernate.hbm2ddl.auto", "create-drop");
 
-                // Регистрируем классы-сущности (аннотированные @Entity)
-
                 configuration.addAnnotatedClass(User.class);
 
-                // Создаём ServiceRegistry на основе настроек
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties())
                         .build();
 
-                // Создаём SessionFactory
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
             } catch (Exception e) {
                 System.err.println("Ошибка создания SessionFactory: " + e);

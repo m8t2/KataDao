@@ -2,7 +2,6 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import jm.task.core.jdbc.util.Util;
@@ -10,6 +9,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 public class UserDaoHibernateImpl implements UserDao {
     private static SessionFactory sessionFactory;
@@ -18,7 +18,6 @@ public class UserDaoHibernateImpl implements UserDao {
     public UserDaoHibernateImpl() {
         this.sessionFactory = Util.getSessionFactory();
     }
-
 
     @Override
     public void createUsersTable() {
@@ -45,7 +44,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public void dropUsersTable() {
         try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
-            String sql = "DROP TABLE users.users";
+            String sql = "DROP TABLE IF EXISTS users";
             session.createNativeQuery(sql).executeUpdate();
             tx.commit();
         } catch (HibernateException e) {
@@ -60,9 +59,9 @@ public class UserDaoHibernateImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
-            String sql = "INSERT INTO users.users(name, lastName, age) VALUES(?, ?, ?)";
-            session.createSQLQuery(sql).executeUpdate();
+            session.save(new User(name, lastName, age));
             tx.commit();
+            System.out.println("Пользователь добавлен успешно");
         } catch (HibernateException e) {
             if (tx != null) tx.rollback();
             e.printStackTrace();
@@ -72,20 +71,42 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void removeUserById(long id) {
-
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
+            session.delete(session.get(User.class, id));
+            User user = session.get(User.class, id);
+            if (user != null) {
+                session.delete(user);
+                System.out.println("Пользователь удален успешно");
+            } else {
+                System.out.println("Пользователь с id=" + id + " не найден");
+            }
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) tx.rollback();
+            e.printStackTrace();
+            System.out.println("Ошибка удаления пользователя Hibernate");
+        }
     }
 
     @Override
     public List<User> getAllUsers() {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            List<User> entities = session.createQuery("from User", User.class).list();
+            entities.stream().forEach(System.out::println);
+            return entities;
+        }
     }
 
     @Override
     public void cleanUsersTable() {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
-            String sql = "TRUNCATE TABLE users.users";
-            session.createNativeQuery(sql).executeUpdate();
+            Query query = session.createQuery("DELETE FROM User");
+            query.executeUpdate();
+            tx.commit();
+        } catch (HibernateException e) {
+            throw new HibernateException("Не удалось очистить таблицу", e);
         }
     }
 }

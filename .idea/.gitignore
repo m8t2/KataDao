@@ -6,3 +6,25 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+/target/
+out/
+bin/
+
+.idea/
+*.iml
+*.class
+*.log
+*.jar
+*.war
+*.ear
+.vscode/
+*.swp
+*.swo
+
+.DS_Store
+Thumbs.db
+
+application.properties
+application.yml
+hibernate.cfg.xml
