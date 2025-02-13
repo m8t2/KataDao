@@ -17,6 +17,9 @@ public class Main {
         userDao.saveUser("Anton", "Titov", (byte) 23);
         userDao.saveUser("Dmitry", "Dmitriev", (byte) 24);
 
+        // Удаление пользователя по id
+        userDao.removeUserById(2);
+
         //Список Юзеров
         System.out.println(userDao.getAllUsers());
 
