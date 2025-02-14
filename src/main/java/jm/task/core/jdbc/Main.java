@@ -17,7 +17,7 @@ public class Main {
         userService.saveUser("Dmitry", "Dmitriev", (byte) 24);
 
         // Удаление пользователя по id
-        userDao.removeUserById(2);
+        userService.removeUserById(2);
 
         //Список Юзеров
         System.out.println(userService.getAllUsers());
