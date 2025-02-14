@@ -23,13 +23,11 @@ public class UserDaoHibernateImpl implements UserDao {
     public void createUsersTable() {
         try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
-
             String sql = "CREATE TABLE IF NOT EXISTS users ("
                     + "id BIGINT AUTO_INCREMENT PRIMARY KEY, "
                     + "name VARCHAR(255) NOT NULL, "
                     + "lastname VARCHAR(255) NOT NULL, "
                     + "age TINYINT NOT NULL)";
-
             session.createNativeQuery(sql).executeUpdate();
             tx.commit();
             System.out.println("Таблица создана с помощью Hibernate");
@@ -62,9 +60,11 @@ public class UserDaoHibernateImpl implements UserDao {
             tx.commit();
             System.out.println("Пользователь добавлен успешно");
         } catch (HibernateException e) {
-            if (tx != null) tx.rollback();
-            e.printStackTrace();
-            System.out.println("Ошибка добавления пользователя Hibernate");
+            if (tx != null) {
+                tx.rollback();
+                e.printStackTrace();
+            }
+            System.out.println("Ошибка удаления пользователя Hibernate");
         }
     }
 
@@ -82,26 +82,33 @@ public class UserDaoHibernateImpl implements UserDao {
             }
             tx.commit();
         } catch (HibernateException e) {
-            if (tx != null) tx.rollback();
-            e.printStackTrace();
+            if (tx != null) {
+                tx.rollback();
+                e.printStackTrace();
+            }
             System.out.println("Ошибка удаления пользователя Hibernate");
         }
     }
 
     @Override
     public List<User> getAllUsers() {
+        List<User> users = null;
         try (Session session = sessionFactory.openSession()) {
-            List<User> entities = session.createQuery("from User", User.class).list();
-            entities.stream().forEach(System.out::println);
-            return entities;
+            users = session.createQuery("from User", User.class).list();
+            users.stream().forEach(System.out::println);
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            System.out.println("Ошибка при получении пользователей Hibernate");
         }
+        return users;
     }
 
     @Override
     public void cleanUsersTable() {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
-            Query query = session.createQuery("DELETE FROM User");
+            String sql = "DELETE FROM User";
+            Query query = session.createQuery(sql);
             query.executeUpdate();
             tx.commit();
         } catch (HibernateException e) {
@@ -109,3 +116,4 @@ public class UserDaoHibernateImpl implements UserDao {
         }
     }
 }
+

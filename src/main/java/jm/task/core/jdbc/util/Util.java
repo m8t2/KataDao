@@ -14,29 +14,19 @@ import org.hibernate.service.ServiceRegistry;
 
 
 public final class Util {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306";
-    private static final String DB_USER = "root";
+    private static final String HIBERNATE_DRIVER = "com.mysql.cj.jdbc.Driver";
+    private static final String DB_ADDRESS = "jdbc:mysql://localhost:3306/users";
+    private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "root";
+    private static final String DB_DIALECT = "org.hibernate.dialect.MySQLDialect";
+    private static final String HIBERNATE_SHOW_SQL= "true";
+    private static final String HIBERNATE_FORMAT_SQL = "true";
+
     private static Connection connection = null;
     private static SessionFactory sessionFactory = null;
 
-
     private Util() {
 
-    }
-
-    public static Connection SQLconnect() {
-        try {
-            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-            Statement stmt = connection.createStatement();
-            stmt.execute("CREATE SCHEMA IF NOT EXISTS Users");
-            stmt.execute("USE Users");
-            System.out.println("Подключение успешно");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Не удалось подключиться");
-        }
-        return connection;
     }
 
     public static SessionFactory getSessionFactory() {
@@ -44,14 +34,13 @@ public final class Util {
             try {
                 Configuration configuration = new Configuration();
 
-                configuration.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
-                configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/users");
-                configuration.setProperty("hibernate.connection.username", "root");
-                configuration.setProperty("hibernate.connection.password", "root");
-                configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-
-                configuration.setProperty("hibernate.show_sql", "true");
-                configuration.setProperty("hibernate.format_sql", "true");
+                configuration.setProperty("hibernate.connection.driver_class", HIBERNATE_DRIVER);
+                configuration.setProperty("hibernate.connection.url", DB_ADDRESS);
+                configuration.setProperty("hibernate.connection.username", DB_USERNAME);
+                configuration.setProperty("hibernate.connection.password", DB_PASSWORD);
+                configuration.setProperty("hibernate.dialect", DB_DIALECT);
+                configuration.setProperty("hibernate.show_sql", HIBERNATE_SHOW_SQL);
+                configuration.setProperty("hibernate.format_sql", HIBERNATE_FORMAT_SQL);
 
                 configuration.addAnnotatedClass(User.class);
 
@@ -69,13 +58,12 @@ public final class Util {
     }
 
     public static void closeConnection() {
-        if (connection != null) {
-            try {
-                connection.close();
-                System.out.println("Соединение закрыто");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        SessionFactory sessionFactory = Util.getSessionFactory();
+        if (sessionFactory != null && !sessionFactory.isClosed()) {
+            sessionFactory.close();
+            System.out.println("SessionFactory успешно закрыт");
+        } else {
+            System.out.println("SessionFactory уже закрыт или не инициализирован");
         }
     }
 }

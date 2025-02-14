@@ -1,32 +1,32 @@
 package jm.task.core.jdbc;
 
-import jm.task.core.jdbc.dao.UserDaoHibernateImpl;
+import jm.task.core.jdbc.service.UserService;
+import jm.task.core.jdbc.service.UserServiceImpl;
 import jm.task.core.jdbc.util.Util;
 
 public class Main {
     public static void main(String[] args) {
-        UserDaoHibernateImpl userDaoHibernate = new UserDaoHibernateImpl();
-
+        UserService userService = new UserServiceImpl();
         //Создание таблицы
-        userDaoHibernate.createUsersTable();
+        userService.createUsersTable();
 
         //Добавление сущностей
-        userDaoHibernate.saveUser("Ivan", "Ivanov", (byte) 23);
-        userDaoHibernate.saveUser("Neil", "Alishev", (byte) 50);
-        userDaoHibernate.saveUser("Oleg", "Sidorov", (byte) 13);
-        userDaoHibernate.saveUser("Zaur", "Tregulov", (byte) 33);
+        userService.saveUser("Ivan", "Ivanov", (byte) 23);
+        userService.saveUser("Neil", "Alishev", (byte) 50);
+        userService.saveUser("Oleg", "Sidorov", (byte) 13);
+        userService.saveUser("Zaur", "Tregulov", (byte) 33);
 
         // Удаление пользователя по id
-        userDaoHibernate.removeUserById(2);
+        userService.removeUserById(2);
 
         //Список Юзеров
-        userDaoHibernate.getAllUsers().forEach(System.out::println);
+        userService.getAllUsers();
 
         //Очистка таблицы
-        userDaoHibernate.cleanUsersTable();
+        userService.cleanUsersTable();
 
         //Удаление таблицы
-        userDaoHibernate.dropUsersTable();
+        userService.dropUsersTable();
 
         //Закрытие соединения
         Util.closeConnection();

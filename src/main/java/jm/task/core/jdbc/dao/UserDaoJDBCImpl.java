@@ -22,7 +22,7 @@ public class UserDaoJDBCImpl implements UserDao {
     private static Connection connection;
 
     public UserDaoJDBCImpl() {
-        this.connection = Util.SQLconnect();
+
     }
 
     @Override
