@@ -1,33 +1,31 @@
 package jm.task.core.jdbc;
 
-import jm.task.core.jdbc.dao.UserDao;
-import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
+import jm.task.core.jdbc.service.UserServiceImpl;
 import jm.task.core.jdbc.util.Util;
 
 public class Main {
     public static void main(String[] args) {
-        UserDao userDao = new UserDaoJDBCImpl();
-
+        UserServiceImpl userService = new UserServiceImpl();
         //Создание таблицы
-        userDao.createUsersTable();
+        userService.createUsersTable();
 
         //Добавление сущностей
-        userDao.saveUser("Ivan", "Ivanov", (byte) 21);
-        userDao.saveUser("Petr", "Petrov", (byte) 23);
-        userDao.saveUser("Anton", "Titov", (byte) 23);
-        userDao.saveUser("Dmitry", "Dmitriev", (byte) 24);
+        userService.saveUser("Ivan", "Ivanov", (byte) 21);
+        userService.saveUser("Petr", "Petrov", (byte) 23);
+        userService.saveUser("Anton", "Titov", (byte) 23);
+        userService.saveUser("Dmitry", "Dmitriev", (byte) 24);
 
         // Удаление пользователя по id
         userDao.removeUserById(2);
 
         //Список Юзеров
-        System.out.println(userDao.getAllUsers());
+        System.out.println(userService.getAllUsers());
 
         //Очистка
-        userDao.cleanUsersTable();
+        userService.cleanUsersTable();
 
         //Удаление
-        userDao.dropUsersTable();
+        userService.dropUsersTable();
 
         //Закрытие соединения
         Util.closeConnection();
